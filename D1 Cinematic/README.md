@@ -21,8 +21,8 @@ main character 1 and 2, game logo, play, exit and settings
 Play, Exit, Settings
 
 ## 1+ logotype text
-s
-game logo plus name
+
+game logo is the knight image
 
 ## 1+ multi-line text block
 
