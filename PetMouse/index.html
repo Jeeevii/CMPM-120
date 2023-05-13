@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PetMouse</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.60.0/phaser.js" integrity="sha512-H05oT7BAjM9Ai1IaFX9zr61NtE2e1P0MkTz3AZXBnseaJSAOt2FGMFJ+vVGutaJxEGA1jxUiYsTBYQNE08/Erw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        class Demo extends Phaser.Scene {
+            create() {
+                this.meep = this.add.text(10,10,'🐁').setOrigin(0.5,0.5);
+                this.input.setDefaultCursor('none');
+                this.input.on('pointerdown', (event) => {
+                    this.tweens.add({
+                        targets: this.meep,
+                        scale: 2,
+                        duration: 100
+                    });
+                });
+                this.input.on('pointerup', (event) => {
+                    this.tweens.add({
+                        targets: this.meep,
+                        scale: 1,
+                        duration: 100
+                    });
+                });
+
+            }
+            update() {
+                let {x,y,isDown} = this.input.activePointer;
+                this.meep.setPosition(x,y);
+
+                if(isDown && Math.random() < 0.025) {
+                    // twerk the mouse
+                    this.tweens.add({
+                        targets: this.meep,
+                        angle: {from: -5, to: 0},
+                        duration: 250
+                    });
+
+                    // spawn a dropping
+                    let dropping = this.add.circle(x+10,y+10,2).setFillStyle(0,1);
+                    dropping.setDepth(-1); // below the mouse
+
+                    // shoot away quickly
+                    this.tweens.add({
+                        targets: dropping,
+                        x: '+=' + (10*Math.random()),
+                        y: '+=' + (10*Math.random()),
+                        duration: 250,
+                        ease: 'Cubic.out'
+                    });
+
+                    // fade out over time
+                    this.tweens.add({
+                        targets: dropping,
+                        alpha: {from: 0.5, to: 0},
+                        duration: 5000,
+                        ease: 'Cubic.in',
+                        onComplete: () => dropping.destroy()
+                    });
+                    
+                }
+            }
+        }
+        let game = new Phaser.Game({
+            width: 640,
+            height: 520,
+            scene: Demo,
+            backgroundColor: 0xdddddd,
+            parent: 'here'
+        });
+    </script>
+</head>
+<body>
+    <div id="here"></div>
+    Drag the mouse around the screen.
+</body>
+</html>
