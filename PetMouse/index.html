@@ -17,6 +17,15 @@
                         scale: 2,
                         duration: 100
                     });
+                    
+                    // add new tween here
+                    this.tweens.add({
+                        targets: this.meep,
+                        y: '+=10',
+                        duration: 100,
+                        yoyo: true,
+                        repeat: 1
+                    });
                 });
                 this.input.on('pointerup', (event) => {
                     this.tweens.add({
